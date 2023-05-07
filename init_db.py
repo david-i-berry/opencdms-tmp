@@ -59,15 +59,17 @@ code_tables = {
     "cdm.reference_surface": "reference_surface.csv",
     "cdm.role": "role.csv"
 }
+
 # note, order is important
 data_tables = {
-    "cdm.host": ["hosts.csv", "host_mwi.csv"],
+    "cdm.host": ["hosts.csv"],
     "cdm.source": ["source.csv"],
     "cdm.observation": ["CA_6016527_1990.csv"],
     "cdm.feature": ["features.csv"]
 }
 
 for key, value in code_tables.items():
+    print(value)
     with open(f"/local/app/data/code_tables/{value}") as fh:
         cursor.copy_expert(f"COPY {key} FROM STDIN WITH CSV HEADER DELIMITER AS '|' NULL AS 'NA' QUOTE E'\b'", fh)
 

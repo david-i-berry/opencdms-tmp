@@ -177,14 +177,14 @@ components:
 info:
   contact:
     email: you@example.org
-    name: Organization Name
-    url: https://wmo.int
-  description: PygeoAPI instance to support the encoding of daily climate data
+    name: OpenCDMS
+    url: https://www.opencdms.org
+  description: PygeoAPI instance deployed as part of the beta.opencdms.org instance
   license:
     name: Unified WMO Data Policy
     url: https://public.wmo.int/en/our-mandate/what-we-do/observations/Unified-WMO-Data-Policy-Resolution
   termsOfService: https://public.wmo.int/en/our-mandate/what-we-do/observations/Unified-WMO-Data-Policy-Resolution
-  title: DayCLI encoding
+  title: OpenCDMS beta API
   version: 0.15.dev0
   x-keywords:
   - wmo
@@ -225,10 +225,11 @@ paths:
       summary: Collections
       tags:
       - server
-  /collections/ca_clim:
+  /collections/observations:
     get:
-      description: Test / example dataset
-      operationId: describeCa_climCollection
+      description: Extract of hourly observations from the 'Hourly Climate Observations'
+        dataset provided by Environment and Climate Change Canada.
+      operationId: describeObservationsCollection
       parameters:
       - $ref: '#/components/parameters/f'
       - $ref: '#/components/parameters/lang'
@@ -243,11 +244,12 @@ paths:
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
       summary: Get Hourly climate data from Ontario (ECCC) metadata
       tags:
-      - ca_clim
-  /collections/ca_clim/items:
+      - observations
+  /collections/observations/items:
     get:
-      description: Test / example dataset
-      operationId: getCa_climFeatures
+      description: Extract of hourly observations from the 'Hourly Climate Observations'
+        dataset provided by Environment and Climate Change Canada.
+      operationId: getObservationsFeatures
       parameters:
       - &id001
         description: The optional f parameter indicates the output format which the
@@ -312,16 +314,16 @@ paths:
             - observer_id
             - observed_property_id
             - observing_procedure_id
-            - report_id
             - collection_id
             - parameter
-            - feature_of_interest_id
-            - version
-            - change_date
-            - user_id
-            - status_id
+            - feature_id
+            - _version
+            - _change_date
+            - _user_id
+            - _status_id
             - comments
-            - source_id
+            - _source_id
+            - _source_identifier
             type: string
           type: array
         style: form
@@ -349,7 +351,7 @@ paths:
         name: observation_type_id
         required: false
         schema:
-          type: INTEGER
+          type: VARCHAR
         style: form
       - explode: false
         in: query
@@ -433,18 +435,11 @@ paths:
         name: observed_property_id
         required: false
         schema:
-          type: INTEGER
+          type: VARCHAR
         style: form
       - explode: false
         in: query
         name: observing_procedure_id
-        required: false
-        schema:
-          type: INTEGER
-        style: form
-      - explode: false
-        in: query
-        name: report_id
         required: false
         schema:
           type: VARCHAR
@@ -465,38 +460,38 @@ paths:
         style: form
       - explode: false
         in: query
-        name: feature_of_interest_id
+        name: feature_id
         required: false
         schema:
           type: VARCHAR
         style: form
       - explode: false
         in: query
-        name: version
+        name: _version
         required: false
         schema:
           type: INTEGER
         style: form
       - explode: false
         in: query
-        name: change_date
+        name: _change_date
         required: false
         schema:
           type: TIMESTAMP
         style: form
       - explode: false
         in: query
-        name: user_id
+        name: _user_id
         required: false
         schema:
           type: VARCHAR
         style: form
       - explode: false
         in: query
-        name: status_id
+        name: _status_id
         required: false
         schema:
-          type: INTEGER
+          type: VARCHAR
         style: form
       - explode: false
         in: query
@@ -507,7 +502,14 @@ paths:
         style: form
       - explode: false
         in: query
-        name: source_id
+        name: _source_id
+        required: false
+        schema:
+          type: VARCHAR
+        style: form
+      - explode: false
+        in: query
+        name: _source_identifier
         required: false
         schema:
           type: VARCHAR
@@ -523,11 +525,48 @@ paths:
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
       summary: Get Hourly climate data from Ontario (ECCC) items
       tags:
-      - ca_clim
-  /collections/ca_clim/items/{featureId}:
+      - observations
+    post:
+      description: Extract of hourly observations from the 'Hourly Climate Observations'
+        dataset provided by Environment and Climate Change Canada.
+      operationId: addObservationsFeatures
+      requestBody:
+        content:
+          application/geo+json:
+            schema: {}
+        description: Adds item to collection
+        required: true
+      responses:
+        '201':
+          description: Successful creation
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Add Hourly climate data from Ontario (ECCC) items
+      tags:
+      - observations
+  /collections/observations/items/{featureId}:
+    delete:
+      description: Extract of hourly observations from the 'Hourly Climate Observations'
+        dataset provided by Environment and Climate Change Canada.
+      operationId: deleteObservationsFeatures
+      parameters:
+      - $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/parameters/featureId
+      responses:
+        '200':
+          description: Successful delete
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Delete Hourly climate data from Ontario (ECCC) items
+      tags:
+      - observations
     get:
-      description: Test / example dataset
-      operationId: getCa_climFeature
+      description: Extract of hourly observations from the 'Hourly Climate Observations'
+        dataset provided by Environment and Climate Change Canada.
+      operationId: getObservationsFeature
       parameters:
       - $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/parameters/featureId
       - $ref: '#/components/parameters/crs'
@@ -544,11 +583,34 @@ paths:
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
       summary: Get Hourly climate data from Ontario (ECCC) item by id
       tags:
-      - ca_clim
-  /collections/ca_clim/queryables:
+      - observations
+    put:
+      description: Extract of hourly observations from the 'Hourly Climate Observations'
+        dataset provided by Environment and Climate Change Canada.
+      operationId: updateObservationsFeatures
+      parameters:
+      - $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/parameters/featureId
+      requestBody:
+        content:
+          application/geo+json:
+            schema: {}
+        description: Updates item in collection
+        required: true
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Update Hourly climate data from Ontario (ECCC) items
+      tags:
+      - observations
+  /collections/observations/queryables:
     get:
-      description: Test / example dataset
-      operationId: getCa_climQueryables
+      description: Extract of hourly observations from the 'Hourly Climate Observations'
+        dataset provided by Environment and Climate Change Canada.
+      operationId: getObservationsQueryables
       parameters:
       - *id001
       - *id002
@@ -563,11 +625,11 @@ paths:
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
       summary: Get Hourly climate data from Ontario (ECCC) queryables
       tags:
-      - ca_clim
-  /collections/ca_stations:
+      - observations
+  /collections/ontario_watershed:
     get:
-      description: Stations
-      operationId: describeCa_stationsCollection
+      description: Test / example dataset
+      operationId: describeOntario_watershedCollection
       parameters:
       - $ref: '#/components/parameters/f'
       - $ref: '#/components/parameters/lang'
@@ -580,13 +642,217 @@ paths:
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
         '500':
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
-      summary: Get Stations (Canada) metadata
+      summary: Get Example watersheds for Ontario, CA metadata
       tags:
-      - ca_stations
-  /collections/ca_stations/items:
+      - ontario_watershed
+  /collections/ontario_watershed/items:
     get:
-      description: Stations
-      operationId: getCa_stationsFeatures
+      description: Test / example dataset
+      operationId: getOntario_watershedFeatures
+      parameters:
+      - *id001
+      - *id002
+      - $ref: '#/components/parameters/bbox'
+      - $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/parameters/limit
+      - $ref: '#/components/parameters/crs'
+      - $ref: '#/components/parameters/bbox-crs'
+      - description: The properties that should be included for each feature. The
+          parameter value is a comma-separated list of property names.
+        explode: false
+        in: query
+        name: properties
+        required: false
+        schema:
+          items:
+            enum:
+            - id
+            - name
+            - description
+            - links
+            - feature_type_id
+            - elevation
+            - parent_id
+            - properties
+            - _version
+            - _change_date
+            - _user_id
+            - _status_id
+            - comments
+            type: string
+          type: array
+        style: form
+      - $ref: '#/components/parameters/vendorSpecificParameters'
+      - $ref: '#/components/parameters/skipGeometry'
+      - $ref: https://raw.githubusercontent.com/opengeospatial/ogcapi-records/master/core/openapi/parameters/sortby.yaml
+      - $ref: '#/components/parameters/offset'
+      - explode: false
+        in: query
+        name: id
+        required: false
+        schema:
+          type: VARCHAR
+        style: form
+      - explode: false
+        in: query
+        name: name
+        required: false
+        schema:
+          type: VARCHAR
+        style: form
+      - explode: false
+        in: query
+        name: description
+        required: false
+        schema:
+          type: VARCHAR
+        style: form
+      - explode: false
+        in: query
+        name: links
+        required: false
+        schema:
+          type: JSONB
+        style: form
+      - explode: false
+        in: query
+        name: feature_type_id
+        required: false
+        schema:
+          type: VARCHAR
+        style: form
+      - explode: false
+        in: query
+        name: elevation
+        required: false
+        schema:
+          type: NUMERIC
+        style: form
+      - explode: false
+        in: query
+        name: parent_id
+        required: false
+        schema:
+          type: VARCHAR
+        style: form
+      - explode: false
+        in: query
+        name: properties
+        required: false
+        schema:
+          type: JSONB
+        style: form
+      - explode: false
+        in: query
+        name: _version
+        required: false
+        schema:
+          type: INTEGER
+        style: form
+      - explode: false
+        in: query
+        name: _change_date
+        required: false
+        schema:
+          type: TIMESTAMP
+        style: form
+      - explode: false
+        in: query
+        name: _user_id
+        required: false
+        schema:
+          type: VARCHAR
+        style: form
+      - explode: false
+        in: query
+        name: _status_id
+        required: false
+        schema:
+          type: VARCHAR
+        style: form
+      - explode: false
+        in: query
+        name: comments
+        required: false
+        schema:
+          type: VARCHAR
+        style: form
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/Features
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get Example watersheds for Ontario, CA items
+      tags:
+      - ontario_watershed
+  /collections/ontario_watershed/items/{featureId}:
+    get:
+      description: Test / example dataset
+      operationId: getOntario_watershedFeature
+      parameters:
+      - $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/parameters/featureId
+      - $ref: '#/components/parameters/crs'
+      - $ref: '#/components/parameters/f'
+      - $ref: '#/components/parameters/lang'
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/Feature
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get Example watersheds for Ontario, CA item by id
+      tags:
+      - ontario_watershed
+  /collections/ontario_watershed/queryables:
+    get:
+      description: Test / example dataset
+      operationId: getOntario_watershedQueryables
+      parameters:
+      - *id001
+      - *id002
+      responses:
+        '200':
+          $ref: '#/components/responses/Queryables'
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get Example watersheds for Ontario, CA queryables
+      tags:
+      - ontario_watershed
+  /collections/stations:
+    get:
+      description: Extract of hourly observations from the 'Climate Stations' dataset
+        provided by Environment and Climate Change Canada.
+      operationId: describeStationsCollection
+      parameters:
+      - $ref: '#/components/parameters/f'
+      - $ref: '#/components/parameters/lang'
+      responses:
+        '200':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/Collection
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '404':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Get Climate Stations (Ontario, Canada) metadata
+      tags:
+      - stations
+  /collections/stations/items:
+    get:
+      description: Extract of hourly observations from the 'Climate Stations' dataset
+        provided by Environment and Climate Change Canada.
+      operationId: getStationsFeatures
       parameters:
       - *id001
       - *id002
@@ -609,19 +875,19 @@ paths:
             - links
             - elevation
             - wigos_station_identifier
-            - facility_type
+            - facility_type_id
             - date_established
             - date_closed
-            - wmo_region
-            - territory
+            - wmo_region_id
+            - territory_id
+            - time_zone_id
             - valid_from
             - valid_to
-            - version
-            - change_date
-            - user_id
-            - status_id
+            - _version
+            - _change_date
+            - _user_id
+            - _status_id
             - comments
-            - time_zone_id
             type: string
           type: array
         style: form
@@ -673,7 +939,7 @@ paths:
         style: form
       - explode: false
         in: query
-        name: facility_type
+        name: facility_type_id
         required: false
         schema:
           type: VARCHAR
@@ -694,14 +960,21 @@ paths:
         style: form
       - explode: false
         in: query
-        name: wmo_region
+        name: wmo_region_id
         required: false
         schema:
           type: VARCHAR
         style: form
       - explode: false
         in: query
-        name: territory
+        name: territory_id
+        required: false
+        schema:
+          type: VARCHAR
+        style: form
+      - explode: false
+        in: query
+        name: time_zone_id
         required: false
         schema:
           type: VARCHAR
@@ -722,31 +995,31 @@ paths:
         style: form
       - explode: false
         in: query
-        name: version
+        name: _version
         required: false
         schema:
           type: INTEGER
         style: form
       - explode: false
         in: query
-        name: change_date
+        name: _change_date
         required: false
         schema:
           type: TIMESTAMP
         style: form
       - explode: false
         in: query
-        name: user_id
+        name: _user_id
         required: false
         schema:
           type: VARCHAR
         style: form
       - explode: false
         in: query
-        name: status_id
+        name: _status_id
         required: false
         schema:
-          type: INTEGER
+          type: VARCHAR
         style: form
       - explode: false
         in: query
@@ -754,13 +1027,6 @@ paths:
         required: false
         schema:
           type: VARCHAR
-        style: form
-      - explode: false
-        in: query
-        name: time_zone_id
-        required: false
-        schema:
-          type: INTEGER
         style: form
       responses:
         '200':
@@ -771,13 +1037,50 @@ paths:
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
         '500':
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
-      summary: Get Stations (Canada) items
+      summary: Get Climate Stations (Ontario, Canada) items
       tags:
-      - ca_stations
-  /collections/ca_stations/items/{featureId}:
+      - stations
+    post:
+      description: Extract of hourly observations from the 'Climate Stations' dataset
+        provided by Environment and Climate Change Canada.
+      operationId: addStationsFeatures
+      requestBody:
+        content:
+          application/geo+json:
+            schema: {}
+        description: Adds item to collection
+        required: true
+      responses:
+        '201':
+          description: Successful creation
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Add Climate Stations (Ontario, Canada) items
+      tags:
+      - stations
+  /collections/stations/items/{featureId}:
+    delete:
+      description: Extract of hourly observations from the 'Climate Stations' dataset
+        provided by Environment and Climate Change Canada.
+      operationId: deleteStationsFeatures
+      parameters:
+      - $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/parameters/featureId
+      responses:
+        '200':
+          description: Successful delete
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Delete Climate Stations (Ontario, Canada) items
+      tags:
+      - stations
     get:
-      description: Stations
-      operationId: getCa_stationsFeature
+      description: Extract of hourly observations from the 'Climate Stations' dataset
+        provided by Environment and Climate Change Canada.
+      operationId: getStationsFeature
       parameters:
       - $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/parameters/featureId
       - $ref: '#/components/parameters/crs'
@@ -792,13 +1095,36 @@ paths:
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
         '500':
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
-      summary: Get Stations (Canada) item by id
+      summary: Get Climate Stations (Ontario, Canada) item by id
       tags:
-      - ca_stations
-  /collections/ca_stations/queryables:
+      - stations
+    put:
+      description: Extract of hourly observations from the 'Climate Stations' dataset
+        provided by Environment and Climate Change Canada.
+      operationId: updateStationsFeatures
+      parameters:
+      - $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/parameters/featureId
+      requestBody:
+        content:
+          application/geo+json:
+            schema: {}
+        description: Updates item in collection
+        required: true
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/InvalidParameter
+        '500':
+          $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
+      summary: Update Climate Stations (Ontario, Canada) items
+      tags:
+      - stations
+  /collections/stations/queryables:
     get:
-      description: Stations
-      operationId: getCa_stationsQueryables
+      description: Extract of hourly observations from the 'Climate Stations' dataset
+        provided by Environment and Climate Change Canada.
+      operationId: getStationsQueryables
       parameters:
       - *id001
       - *id002
@@ -811,9 +1137,9 @@ paths:
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/NotFound
         '500':
           $ref: https://schemas.opengis.net/ogcapi/features/part1/1.0/openapi/ogcapi-features-1.yaml#/components/responses/ServerError
-      summary: Get Stations (Canada) queryables
+      summary: Get Climate Stations (Ontario, Canada) queryables
       tags:
-      - ca_stations
+      - stations
   /conformance:
     get:
       description: API conformance definition
@@ -1031,20 +1357,24 @@ paths:
       tags:
       - daycli-encoder
 servers:
-- description: PygeoAPI instance to support the encoding of daily climate data
+- description: PygeoAPI instance deployed as part of the beta.opencdms.org instance
   url: http://localhost:5000
 tags:
-- description: PygeoAPI instance to support the encoding of daily climate data
+- description: PygeoAPI instance deployed as part of the beta.opencdms.org instance
   externalDocs:
     description: information
     url: https://community.wmo.int/activity-areas/wis/wis2-implementation
   name: server
 - description: SpatioTemporal Asset Catalog
   name: stac
+- description: Extract of hourly observations from the 'Hourly Climate Observations'
+    dataset provided by Environment and Climate Change Canada.
+  name: observations
+- description: Extract of hourly observations from the 'Climate Stations' dataset
+    provided by Environment and Climate Change Canada.
+  name: stations
 - description: Test / example dataset
-  name: ca_clim
-- description: Stations
-  name: ca_stations
+  name: ontario_watershed
 - description: Process to convert DAYCLI data to BUFR
   name: daycli-encoder
 - description: Process to ingest CDM formatted observations

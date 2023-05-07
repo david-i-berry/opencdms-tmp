@@ -15,8 +15,9 @@ RUN echo "Acquire::Check-Valid-Until \"false\";\nAcquire::Check-Date \"false\";"
     && apt-get update -y \
     && apt-get install -y ${DEBIAN_PACKAGES} \
     && apt-get install -y python3 python3-pip libpq-dev \
+    && pip3 install --no-cache-dir click==8.1.3 \
     && pip3 install --no-cache-dir https://github.com/wmo-im/csv2bufr/archive/pygeoapi-debug.zip \
-    && pip3 install --no-cache-dir https://github.com/david-i-berry/pyopencdms/archive/main.zip \
+    && pip3 install --no-cache-dir https://github.com/opencdms/opencdms/archive/main.zip \
     && pip3 install --no-cache-dir https://github.com/david-i-berry/opencdms-pygeoapi/archive/wip.zip
 
 WORKDIR /tmp
@@ -26,6 +27,7 @@ COPY processes/ /tmp/processes/
 RUN pip3 install -r requirements-providers.txt
 RUN cd /tmp/processes/cdm && python3 setup.py install
 
+# clean up
 RUN rm -R /tmp
 
 ADD ./config /config
