@@ -61,9 +61,10 @@ code_tables = {
 }
 # note, order is important
 data_tables = {
-    "cdm.host": ["hosts.csv"],
+    "cdm.host": ["hosts.csv", "host_mwi.csv"],
     "cdm.source": ["source.csv"],
-    "cdm.observation": ["CA_6016527_1990.csv"]
+    "cdm.observation": ["CA_6016527_1990.csv"],
+    "cdm.feature": ["features.csv"]
 }
 
 for key, value in code_tables.items():
