@@ -61,9 +61,12 @@ code_tables = {
 }
 # note, order is important
 data_tables = {
-    "cdm.host": ["hosts.csv", "host_mwi.csv"],
+    "cdm.host": ["hosts.csv"],
     "cdm.source": ["source.csv"],
-    "cdm.observation": ["CA_6016527_1990.csv"],
+    "cdm.observer": ["observer.csv"],
+    "cdm.deployment": ["deployment.csv"],
+    "cdm.observer_characteristics": ["observer_characteristics.csv"],
+    # "cdm.observation": ["CA_6016527_1990.csv"],
     "cdm.feature": ["features.csv"]
 }
 

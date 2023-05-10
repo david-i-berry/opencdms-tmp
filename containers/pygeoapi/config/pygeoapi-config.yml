@@ -64,6 +64,10 @@ resources:
       type: process
       processor:
           name: csv2bufr.pygeoapi_daycli_plugin.daycliProcessor
+    ingestHost:
+      type: process
+      processor:
+        name: OpenCDMSWMDR.ingestHost
     cdm:
       type: process
       processor:
@@ -114,6 +118,40 @@ resources:
               table: observation
               geom_field: location
               editable: true
+    observer:
+        type: collection
+        title: Observer
+        description: Data table of observers
+        keywords:
+            - []
+        links:
+            - type: text/html
+              rel: about
+              title: Example link
+              href: https://example.com
+        extents:
+            spatial:
+                bbox: [-142, 42, -52, 84]
+                crs: http://www.opengis.net/def/crs/OGC/1.3/CRS84
+            temporal:
+                begin: 1953-01-01T00:00:00Z #TODO
+                end: null # or empty
+        crs:
+            - WGS84
+        providers:
+            - type: feature
+              name: PostgreSQL
+              data:
+                  host: opencdms-database
+                  port: 5432 # Default 5432 if not provided
+                  dbname: opencdms
+                  user: opencdms
+                  password: insecure-change-me
+                  search_path: [cdm,opencdms, public]
+              id_field: id
+              title_field: name
+              table: observer
+              geom_field: location
     stations:
         type: collection
         title: Climate Stations (Ontario, Canada)
@@ -722,3 +760,51 @@ resources:
               id_field: id
               title_field: name
               table: wmo_region
+    deployment:
+        type: vocabulary
+        title: Deployment
+        description: Data table of deployments
+        keywords:
+            - []
+        links:
+            - type: text/html
+              rel: about
+              title: Example link
+              href: https://example.com
+        providers:
+            - type: feature
+              name: PostgreSQL-nonspatial
+              data:
+                  host: opencdms-database
+                  port: 5432 # Default 5432 if not provided
+                  dbname: opencdms
+                  user: opencdms
+                  password: insecure-change-me
+                  search_path: [cdm,opencdms, public]
+              id_field: id
+              title_field: name
+              table: deployment
+    observer_characteristics:
+        type: vocabulary
+        title: Observer characteristics
+        description: Data table of observer characteristics
+        keywords:
+            - []
+        links:
+            - type: text/html
+              rel: about
+              title: Example link
+              href: https://example.com
+        providers:
+            - type: feature
+              name: PostgreSQL-nonspatial
+              data:
+                  host: opencdms-database
+                  port: 5432 # Default 5432 if not provided
+                  dbname: opencdms
+                  user: opencdms
+                  password: insecure-change-me
+                  search_path: [cdm,opencdms, public]
+              id_field: id
+              title_field: name
+              table: observer_characteristics
