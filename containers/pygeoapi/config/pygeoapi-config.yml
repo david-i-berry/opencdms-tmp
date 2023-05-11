@@ -89,11 +89,6 @@ resources:
               title: Environment and Climate Change Canada Data Servers End-use Licence
               href: https://eccc-msc.github.io/open-data/licence/readme_en/
               hreflang: en-CA
-            - type: text/html
-              rel: license
-              title: Test 2nd licence
-              href: https://eccc-msc.github.io/open-data/licence/readme_en/
-              hreflang: en-CA
         extents:
             spatial:
                 bbox: [-142, 42, -52, 84]
@@ -163,11 +158,6 @@ resources:
               rel: canonical
               title: Climate Stations
               href: https://api.weather.gc.ca/collections/climate-stations
-              hreflang: en-CA
-            - type: text/html
-              rel: license
-              title: Test 2nd licence
-              href: https://eccc-msc.github.io/open-data/licence/readme_en/
               hreflang: en-CA
         extents:
             spatial:

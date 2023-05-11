@@ -27,6 +27,7 @@ COPY processes/ /tmp/processes/
 
 RUN pip3 install -r requirements-providers.txt
 RUN cd /tmp/processes/cdm && python3 setup.py install
+RUN cd /tmp/processes/OpenCDMSWMDR && python3 setup.py install
 
 # clean up
 RUN rm -R /tmp
